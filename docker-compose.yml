@@ -6,7 +6,9 @@ services:
       context: .
       dockerfile: ./docker/php/Dockerfile
     volumes:
-      - ./public:/var/www/html/
+      - .:/var/www/html/
+      # vendorフォルダだけはマウントから除外（コンテナ内のものを使う）設定
+      - /var/www/html/public/vendor
     depends_on:
       - db
     ports:
