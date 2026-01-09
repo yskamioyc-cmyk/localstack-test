@@ -1,2 +1,9 @@
-# シェルスクリプトは常に LF で扱うよう強制する
+# すべてのテキストファイルの改行コードをGit管理上はLFに統一
+* text=auto
+
+# シェルスクリプトは強制的にLF
 *.sh text eol=lf
+
+# Composerの設定ファイルもLinux環境との互換性のためにLFで固定
+composer.json text eol=lf
+composer.lock text eol=lf

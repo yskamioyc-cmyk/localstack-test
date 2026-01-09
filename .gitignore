@@ -6,3 +6,6 @@ public/docker/db/data/
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# PHPコンテナ内のComposerのvedorフォルダ
+/public/vendor
