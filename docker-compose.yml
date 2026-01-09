@@ -1,0 +1,71 @@
+services:
+  # PHP
+  php:
+    container_name: php
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    volumes:
+      - ./public:/var/www/html/
+    depends_on:
+      - db
+    ports:
+      - "80:80"
+  
+  # MySQL
+  db:
+    container_name: mysql_host
+    build:
+      context: .
+      dockerfile: ./docker/mysql/Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      TZ: ${DB_TIMEZONE}
+    volumes:
+      - ./public/docker/db/data:/var/lib/mysql
+      - ./public/docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./public/docker/db/sql:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+  
+  # phpMyAdmin
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    ports:
+      - "8081:80"    
+    depends_on:
+      - db
+  
+  # 擬似AWS環境
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"    # AWS全サービス共通のエッジポート
+    environment:
+      - SERVICES=s3,rds   # 練習したいサービスを指定
+      - DEFAULT_REGION=${AWS_REGION}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "./init-aws:/etc/localstack/init/ready.d"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+  
+  # AWS操作用ツール
+  aws-cli:
+    container_name: aws-cli
+    image: amazon/aws-cli
+    depends_on:
+      - localstack
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_KEY}
+      - AWS_DEFAULT_REGION=${AWS_REGION}
+    # 起動を維持する設定
+    entrypoint: /bin/sh -c "sleep infinity"

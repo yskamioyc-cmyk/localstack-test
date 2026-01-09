@@ -1,0 +1,8 @@
+.env
+
+# Docker MySQL data (自動生成されるDBの実体)
+public/docker/db/data/
+
+# OS generated files
+.DS_Store
+Thumbs.db
