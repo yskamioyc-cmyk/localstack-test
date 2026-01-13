@@ -46,7 +46,10 @@ AWS_SECRET_KEY=test
 
   ![s3test.php](./images/s3test.png)
 
-* phpMyAdminのログイン画面では、`.env`ファイルで指定したユーザー名とパスワードでログインできます。
+* phpMyAdminにアクセスすると、以下の画面が表示されます。サンプル通りの`.env`ファイルを作成した場合、
+　「ユーザー名」="root"、「パスワード」="root"でログイン可能です。
+
+　![phpMyAdmin_login](./images/phpMyAdmin_login.png)
 
 ## ６．構成図
 ![システム構成図](./images/システム構成図_localstack-test.drawio.png)
