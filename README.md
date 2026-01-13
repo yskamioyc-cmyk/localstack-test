@@ -49,8 +49,9 @@ AWS_SECRET_KEY=test
 * phpMyAdminにアクセスすると、以下の画面が表示されます。サンプル通りの`.env`ファイルを作成した場合、
 　「ユーザー名」="root"、「パスワード」="root"でログイン可能です。
 
-　{: align="center"}
-  ![phpMyAdmin_login](./images/phpMyAdmin_login.png){width=50%}
+<p align = center>
+  <img src="./images/phpMyAdmin_login.png" width = 50% alt = "phpMyAdmin_login">
+</p>
 
 ## ６．構成図
 ![システム構成図](./images/システム構成図_localstack-test.drawio.png)
