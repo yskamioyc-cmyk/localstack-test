@@ -27,7 +27,8 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       TZ: ${DB_TIMEZONE}
     volumes:
-      - ./public/docker/db/data:/var/lib/mysql
+      #- ./public/docker/db/data:/var/lib/mysql # データ永続化の場合はこちらを使用
+      - mysql_db_data:/var/lib/mysql # データを永続させない場合はこちらを使用
       - ./public/docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
       - ./public/docker/db/sql:/docker-entrypoint-initdb.d
     ports:
@@ -57,6 +58,7 @@ services:
       - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
       - "./init-aws:/etc/localstack/init/ready.d"
+      - "ls_data:/var/lib/localstack" # データを永続化する場合はコメントアウト
       - "/var/run/docker.sock:/var/run/docker.sock"
   
   # AWS操作用ツール
@@ -71,3 +73,8 @@ services:
       - AWS_DEFAULT_REGION=${AWS_REGION}
     # 起動を維持する設定
     entrypoint: /bin/sh -c "sleep infinity"
+
+# 使用するボリュームの定義。データを永続化する場合は以下をコメントアウトする。
+volumes:
+  mysql_db_data:
+  ls_data:
