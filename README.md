@@ -53,6 +53,12 @@ AWS_SECRET_KEY=test
   <img src="./images/phpMyAdmin_login.png" width = 50% alt = "phpMyAdmin_login">
 </p>
 
+* http://localhost/upload.php/ にアクセスすると、画像をS3バケットに格納することができます。
+
+<p align = center>
+  <img src="./images/upload.png" width = 75% alt ="upload_picture">
+</p>
+
 ## ６．構成図
 ![システム構成図](./images/システム構成図_localstack-test.drawio.png)
 
