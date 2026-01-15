@@ -45,6 +45,22 @@ $s3Client = new S3Client([
 
 $message = "";
 
+// 削除処理の追加
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
+    try{
+        $id = $_POST['delete_id'];
+
+        // DBから該当するデータの情報を削除する
+        $stmt = $pdo->prepare("DELETE FROM images WHERE id = ?");
+        $stmt->execute([$id]);
+
+        $message ="データベースから削除しました（S3のファイルはまだ残っています）";
+    } catch (Exception $e) {
+        $message = "削除エラー： " . $e->getMessage();
+    }
+}
+// TODO: 次回、S3バケット内部の実体ファイルを削除する処理を追加する
+
 // 5. アップロード処理とDB登録
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {
     try {
@@ -116,6 +132,13 @@ $images = $pdo->query("SELECT * FROM images ORDER BY created_at DESC")->fetchAll
                     <div class="img-card">
                         <img src="<?php echo htmlspecialchars($img['image_url']); ?>" alt="Image">
                         <p><?php echo htmlspecialchars($img['file_name']); ?></p>
+
+                        <form method="POST" style="margin-top: 10px; border: none; padding: 0;">
+                            <input type="hidden" name="delete_id" value="<?php echo $img['id']; ?>">
+                            <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;" onclick="return confirm('本当に削除しますか？')">
+                                削除
+                            </button>
+                        </form>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
