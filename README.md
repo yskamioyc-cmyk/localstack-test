@@ -63,7 +63,7 @@ AWS_SECRET_KEY=test
   * 「削除」ボタンを押すと、MySQLのレコードとLocalStack(S3)内の実体ファイルが同時に削除されます。
 
 ## ６．構成図
-![システム構成図](./images/システム構成図_localstack-test.drawio.png)
+![システム構成図](./images/システム構成図_localstack-test.drawio-2.png)
 
 dockerを使用した構成のため、ホストOSに影響を与えずに仮想環境の構築が可能です。
 
