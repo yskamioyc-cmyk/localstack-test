@@ -59,7 +59,7 @@ AWS_SECRET_KEY=test
   <img src="./images/upload.png" width = 75% alt ="upload_picture">
 </p>
 
-* http://localhost/upload.php/では画像のアップロードに加え、保存済み画像の**削除**も可能です。
+* http://localhost/upload.php/ では画像のアップロードに加え、保存済み画像の**削除**も可能です。
   * 「削除」ボタンを押すと、MySQLのレコードとLocalStack(S3)内の実体ファイルが同時に削除されます。
 
 ## ６．構成図
