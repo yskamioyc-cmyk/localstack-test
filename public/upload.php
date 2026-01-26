@@ -45,21 +45,40 @@ $s3Client = new S3Client([
 
 $message = "";
 
-// 削除処理の追加
+// 削除処理の完全版
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     try{
         $id = $_POST['delete_id'];
 
-        // DBから該当するデータの情報を削除する
-        $stmt = $pdo->prepare("DELETE FROM images WHERE id = ?");
+        // 1.DBから削除対象の「ファイル名」を特定する
+        //理由：DBを先に消すと、S3のどのファイルを消すべきかわからなくなるため
+        $stmt = $pdo->prepare("SELECT file_name FROM images WHERE id = ?");
         $stmt->execute([$id]);
+        $image = $stmt->fetch();
 
-        $message ="データベースから削除しました（S3のファイルはまだ残っています）";
+        if ($image) {
+            $bucketName = 'my-test-bucket'; // create-S3-bucket.shと一致
+            $key = 'uploads/' . $image['file_name']; // アップロード時のパス構造と一致
+
+            // 2. S3(LocalStack)上の実体ファイルを削除
+            $s3Client->deleteObject([
+                'Bucket' => $bucketName,
+                'Key'    => $key,
+            ]);
+
+            // 3. 最後にDBからレコードを削除
+            $stmt = $pdo->prepare("DELETE FROM images WHERE id = ?");
+            $stmt->execute([$id]);
+
+            $message = "S3の画像とデータベースの記録を削除しました。";
+        } else {
+            $message = "エラー：削除対象のデータがデータベース上に見つかりません。";
+        }
+
     } catch (Exception $e) {
         $message = "削除エラー： " . $e->getMessage();
     }
 }
-// TODO: 次回、S3バケット内部の実体ファイルを削除する処理を追加する
 
 // 5. アップロード処理とDB登録
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {
