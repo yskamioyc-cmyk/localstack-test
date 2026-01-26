@@ -71,7 +71,7 @@ dockerを使用した構成のため、ホストOSに影響を与えずに仮想
 ### S3バケットの実態確認をしたい。
 ブラウザ上の表示だけでなく、`aws-cli`コンテナを使用して、CLI上でもLocalStack内の実体ファイルを確認可能です。その場合、以下のコマンドをターミナルで実行してください。
 
-```bash
+```text
 # S3バケット内のファイル一覧を表示
 docker exec -it aws-cli aws --endpoint-url=http://localstack:4566 s3 ls s3://my-test-bucket/uploads/
 ```
